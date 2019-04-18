@@ -15,3 +15,6 @@
 
 [ui]
     build_rule_minimum_duration_millis = 500
+
+[httpserver]
+    port = 9001

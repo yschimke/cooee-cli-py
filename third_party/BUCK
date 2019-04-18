@@ -26,3 +26,58 @@ prebuilt_python_library(
     visibility = ['PUBLIC'],
 )
 
+http_file(
+  name = 'urllib3http',
+  urls = [
+    'https://files.pythonhosted.org/packages/df/1c/59cca3abf96f991f2ec3131a4ffe72ae3d9ea1f5894abe8a9c5e3c77cfee/urllib3-1.24.2-py2.py3-none-any.whl',
+  ],
+  sha256 = '4c291ca23bbb55c76518905869ef34bdd5f0e46af7afe6861e8375643ffee1a0',
+)
+
+prebuilt_python_library(
+    name = 'urllib3',
+    binary_src = ':urllib3http',
+    visibility = ['PUBLIC'],
+)
+
+http_file(
+  name = 'chardethttp',
+  urls = [
+    'https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl',
+  ],
+  sha256 = 'fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691',
+)
+
+prebuilt_python_library(
+    name = 'chardet',
+    binary_src = ':chardethttp',
+    visibility = ['PUBLIC'],
+)
+
+http_file(
+  name = 'certifihttp',
+  urls = [
+    'https://files.pythonhosted.org/packages/60/75/f692a584e85b7eaba0e03827b3d51f45f571c2e793dd731e598828d380aa/certifi-2019.3.9-py2.py3-none-any.whl',
+  ],
+  sha256 = '59b7658e26ca9c7339e00f8f4636cdfe59d34fa37b9b04f6f9e9926b3cece1a5',
+)
+
+prebuilt_python_library(
+    name = 'certifi',
+    binary_src = ':certifihttp',
+    visibility = ['PUBLIC'],
+)
+
+http_file(
+  name = 'idnahttp',
+  urls = [
+    'https://files.pythonhosted.org/packages/14/2c/cd551d81dbe15200be1cf41cd03869a46fe7226e7450af7a6545bfc474c9/idna-2.8-py2.py3-none-any.whl',
+  ],
+  sha256 = 'ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c',
+)
+
+prebuilt_python_library(
+    name = 'idna',
+    binary_src = ':idnahttp',
+    visibility = ['PUBLIC'],
+)
