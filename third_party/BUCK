@@ -1,0 +1,28 @@
+http_file(
+  name = 'clickhttp',
+  urls = [
+    'https://files.pythonhosted.org/packages/fa/37/45185cb5abbc30d7257104c434fe0b07e5a195a6847506c074527aa599ec/Click-7.0-py2.py3-none-any.whl',
+  ],
+  sha256 = '2335065e6395b9e67ca716de5f7526736bfa6ceead690adf616d925bdc622b13',
+)
+
+prebuilt_python_library(
+    name = 'click',
+    binary_src = ':clickhttp',
+    visibility = ['PUBLIC'],
+)
+
+http_file(
+  name = 'requestshttp',
+  urls = [
+    'https://files.pythonhosted.org/packages/7d/e3/20f3d364d6c8e5d2353c72a67778eb189176f08e873c9900e10c0287b84b/requests-2.21.0-py2.py3-none-any.whl',
+  ],
+  sha256 = '7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b',
+)
+
+prebuilt_python_library(
+    name = 'requests',
+    binary_src = ':requestshttp',
+    visibility = ['PUBLIC'],
+)
+

@@ -1,0 +1,14 @@
+; .buckconfig
+
+[project]
+    glob_handler = watchman
+    ide = intellij
+
+[cache]
+    dir_max_size = 512MB
+
+[python#py3]
+    interpreter = /usr/local/bin/python3
+
+[ui]
+    build_rule_minimum_duration_millis = 500

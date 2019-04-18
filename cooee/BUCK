@@ -1,0 +1,14 @@
+python_binary(
+    name = 'cooee',
+    main_module = 'cooee',
+    deps = [
+        ':lib',
+        '//third_party:click',
+        '//third_party:requests',
+    ],
+)
+
+python_library(
+  name = 'lib',
+  srcs = glob(['*.py']),
+)
