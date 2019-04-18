@@ -1,0 +1,7 @@
+python_test(
+  name = 'cooee',
+  srcs = glob(['*.py']),
+  deps = [
+    '//cooee:lib',
+  ],
+)
