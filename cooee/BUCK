@@ -10,6 +10,9 @@ python_binary(
         '//third_party:chardet',
         '//third_party:certifi',
         '//third_party:idna',
+        '//third_party:prompt_toolkit',
+        '//third_party:six',
+        '//third_party:wcwidth',
     ],
 )
 
