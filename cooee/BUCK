@@ -1,6 +1,7 @@
 python_binary(
     name = 'cooee',
     main_module = 'cooee',
+    platform = 'py3',
     deps = [
         ':lib',
         '//third_party:click',

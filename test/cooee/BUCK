@@ -1,7 +1,8 @@
 python_test(
-  name = 'cooee',
-  srcs = glob(['*.py']),
-  deps = [
-    '//cooee:lib',
-  ],
+    name = 'cooee',
+    srcs = glob(['*.py']),
+    platform = 'py3',
+    deps = [
+        '//cooee:lib',
+    ],
 )

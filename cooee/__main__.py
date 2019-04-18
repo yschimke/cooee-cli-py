@@ -1,13 +1,18 @@
 import click
+import webbrowser
 
 @click.command()
-@click.option('--count', default=1, help='Number of greetings.')
-@click.option('--name', prompt='Your name',
-              help='The person to greet.')
-def hello(count, name):
-    """Simple program that greets NAME for a total of COUNT times."""
-    for x in range(count):
-        click.echo('Hello %s!' % name)
+@click.option('--login', is_flag=True, help='Login to coo.ee')
+@click.option('--local', '-l', is_flag=True, help='Use local services')
+def cooee(login: bool = False, local: bool = False):
+    """https://coo.ee command line."""
+    if (login):
+        webbrowser.open(web_path(local=local))
+
+
+def web_path(path: str = "/", local: bool = False):
+    return f"https://www.coo.ee{path}"
+
 
 if __name__ == '__main__':
-    hello()
+    cooee()
