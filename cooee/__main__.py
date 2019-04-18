@@ -64,8 +64,9 @@ def todo():
     r.raise_for_status()
 
     result: Dict[str, Any] = r.json()
+    todos: List[Dict[str, Any]] = result["todos"]
 
-    print(result)
+    print(todos)
 
 
 def complete(arguments: List[str], fish: bool = False):
