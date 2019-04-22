@@ -15,6 +15,13 @@ if os.path.isfile(token_file):
         auth = HTTPBearerAuth(f.read().strip())
 
 
+def write_token(token: str):
+    os.makedirs(os.path.expanduser("~/.cooee"), exist_ok=True)
+    token_file = os.path.expanduser("~/.cooee/token")
+    with open(token_file, 'w') as f:
+        f.write(token)
+
+
 def get_auth() -> Optional[AuthBase]:
     return auth
 

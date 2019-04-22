@@ -1,11 +1,12 @@
 import webbrowser
+from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
 from typing import List, Dict, Any
 
 import click
 
 from .actions import launch_action
 from .apirequests import complete_request, launch_request, todo_request
-from .connection import web_path
+from .connection import web_path, write_token
 from .repl import run_repl
 
 
@@ -23,7 +24,7 @@ def set_local(ctx, param, value):
 def main(login: bool = False, fish_complete: bool = False, repl: bool = False, arguments: List[str] = None):
     """https://coo.ee command line."""
     if login:
-        webbrowser.open(web_path())
+        login_and_store()
     elif fish_complete:
         complete_cli(arguments, fish=fish_complete)
     elif repl:
@@ -32,6 +33,32 @@ def main(login: bool = False, fish_complete: bool = False, repl: bool = False, a
         todo()
     else:
         launch(arguments)
+
+
+def login_and_store():
+    class LoginHandler(BaseHTTPRequestHandler):
+        def log_request(self, code='-', size='-'):
+            if code != 200:
+                super().log_request(code, size)
+
+        # noinspection PyPep8Naming
+        def do_GET(s):
+            import urllib
+
+            s.send_response(200)
+            s.end_headers()
+
+            url = urllib.parse.urlparse(s.path)
+            query = urllib.parse.parse_qs(url.query)
+
+            write_token(query['code'][0])
+            s.server.shutdown()
+
+    callback = 'http://localhost:3000/callback'
+    webbrowser.open(web_path(f"/user/jwt?callback={callback}"))
+
+    server = ThreadingHTTPServer(('', 3000), LoginHandler)
+    server.serve_forever()
 
 
 def launch(arguments: List[str]):
