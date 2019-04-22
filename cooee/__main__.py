@@ -1,5 +1,7 @@
+import os
 import webbrowser
-from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
+from logging import DEBUG
 from typing import List, Dict, Any
 
 import click
@@ -17,14 +19,25 @@ def set_local(ctx, param, value):
 
 @click.command()
 @click.option('--login', is_flag=True, help='Login to coo.ee')
+@click.option('--logout', is_flag=True, help='Logout from coo.ee')
+@click.option('--version', is_flag=True, help='Show version')
 @click.option('--local', '-l', is_flag=True, help='Use local services', callback=set_local, expose_value=False)
 @click.option('--fish-complete', is_flag=True, help='Fish shell completion')
 @click.option('--repl', is_flag=True, help='Show Repl')
+@click.option('--debug', is_flag=True, help='Debug')
 @click.argument('arguments', nargs=-1)
-def main(login: bool = False, fish_complete: bool = False, repl: bool = False, arguments: List[str] = None):
+def main(login: bool = False, fish_complete: bool = False, repl: bool = False, arguments: List[str] = None,
+         logout: bool = False, version: bool = False, debug: bool = False):
     """https://coo.ee command line."""
+    if debug:
+        enable_debug()
+
     if login:
         login_and_store()
+    elif logout:
+        logout_token()
+    elif version:
+        show_version()
     elif fish_complete:
         complete_cli(arguments, fish=fish_complete)
     elif repl:
@@ -33,6 +46,31 @@ def main(login: bool = False, fish_complete: bool = False, repl: bool = False, a
         todo()
     else:
         launch(arguments)
+
+
+# noinspection PyUnresolvedReferences
+def enable_debug():
+    import requests
+    import logging
+    from http.client import HTTPConnection
+
+    logging.basicConfig(
+        level=DEBUG,
+        format='%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+    )
+    HTTPConnection.debuglevel = 1
+    req_log = logging.getLogger('requests')
+    req_log.setLevel(logging.DEBUG)
+    req_log.propagate = True
+
+
+def logout_token():
+    os.remove(os.expanduser("~/.cooee/token"))
+
+
+def show_version():
+    print("Version x.x")
 
 
 def login_and_store():
