@@ -18,3 +18,6 @@
 
 [httpserver]
     port = 9001
+
+[parser]
+  default_build_file_syntax = SKYLARK
