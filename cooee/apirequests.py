@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
 
 import requests
 
@@ -17,7 +17,7 @@ def complete_request(arguments: List[str]) -> List[Dict[str, Any]]:
     return suggestions
 
 
-def launch_request(arguments: List[str]) -> Dict[str, Any]:
+def launch_request(arguments: Union[str,List[str]]) -> Dict[str, Any]:
     path = api_path(f"/api/v0/goinfo?q={'+'.join(arguments)}")
     r = requests.get(path, headers=headers, auth=get_auth())
 

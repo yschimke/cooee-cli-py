@@ -1,4 +1,3 @@
-import asyncio
 import webbrowser
 from typing import List, Dict, Any
 
@@ -8,8 +7,6 @@ from .actions import launch_action
 from .apirequests import complete_request, launch_request, todo_request
 from .connection import web_path
 from .repl import run_repl
-
-loop = asyncio.get_event_loop()
 
 
 def set_local(ctx, param, value):
@@ -30,7 +27,7 @@ def main(login: bool = False, fish_complete: bool = False, repl: bool = False, a
     elif fish_complete:
         complete_cli(arguments, fish=fish_complete)
     elif repl:
-        asyncio.run(run_repl())
+        run_repl()
     elif not arguments:
         todo()
     else:
@@ -60,4 +57,4 @@ def complete_cli(arguments: List[str], fish: bool = False):
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()
