@@ -18,12 +18,17 @@ def complete_request(arguments: List[str]) -> List[Dict[str, Any]]:
 
 
 def launch_request(arguments: Union[str,List[str]]) -> Dict[str, Any]:
+    if type(arguments) == str:
+        arguments = [arguments]
+
     path = api_path(f"/api/v0/goinfo?q={'+'.join(arguments)}")
     r = requests.get(path, headers=headers, auth=get_auth())
 
-    r.raise_for_status()
+    # if r.status_code != 404:
+    #     r.raise_for_status()
 
     result: Dict[str, Any] = r.json()
+    result["status_code"] = r.status_code
 
     return result
 

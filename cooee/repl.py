@@ -1,6 +1,8 @@
 import os
+import urllib
 from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
+from urllib.parse import ParseResult
 
 from prompt_toolkit.completion import Completer, Completion, CompleteEvent, ThreadedCompleter
 from prompt_toolkit.document import Document
@@ -15,7 +17,7 @@ from .apirequests import launch_request
 
 todos: List[Dict[str, Any]] = []
 updated_at: datetime = datetime.now()
-selected: Optional[Dict[str, Any]] = None
+selected: Optional[Dict[str, Any]] = {"message": "Todos"}
 
 
 def update_todos():
@@ -32,14 +34,17 @@ def update_todos():
 class CooeeValidator(Validator):
     def validate(self, document):
         global selected
-        selected = document.current_line
-        result = launch_request(selected)
-        # print(f"'{selected}' {result}")
-        if result["message"] == "no match":
-            selected = None
-            raise ValidationError(0, f"no match")
+        line = document.current_line
+
+        if line == "":
+            selected = {"message": "Todos"}
         else:
-            selected = result
+            result = launch_request(line)
+            if result["status_code"] == 404:
+                selected = None
+                raise ValidationError(0, f"no match")
+            else:
+                selected = result
 
 
 class CooeeCompleter(Completer):
@@ -78,11 +83,9 @@ class CooeeCompleter(Completer):
             self.loading -= 1
 
 
-def launch(arguments: List[str]):
-    if arguments != [] and arguments != [""]:
-        result: Dict[str, Any] = launch_request(arguments)
-
-        launch_action(result)
+def launch(arguments: str):
+    result: Dict[str, Any] = launch_request(arguments)
+    launch_action(result)
 
 
 def run_repl():
@@ -93,7 +96,19 @@ def run_repl():
     cooee_validator = CooeeValidator()
 
     def get_rprompt():
-        return f"> {selected}"
+        global selected
+
+        if selected is None:
+            return ""
+
+        if "location" in selected:
+            url: str = selected["location"]
+            parts: ParseResult = urllib.parse.urlparse(url)
+            return parts.hostname + parts.path
+        elif "message" in selected:
+            return selected["message"]
+
+        return f"{selected}"
 
     def bottom_toolbar():
         update_todos()
@@ -104,20 +119,27 @@ def run_repl():
     history_file = os.path.expanduser("~/.cooee/repl.hist")
     session = PromptSession('> ',
                             completer=ThreadedCompleter(cooee_completer),
-                            complete_while_typing=True,
+                            complete_while_typing=False,
                             bottom_toolbar=bottom_toolbar,
                             complete_style=CompleteStyle.MULTI_COLUMN,
                             history=FileHistory(history_file),
                             refresh_interval=5,
-                            rprompt=get_rprompt(),
+                            rprompt=get_rprompt,
                             validator=ThreadedValidator(cooee_validator),
+                            validate_while_typing=True,
                             )
 
     while True:
         try:
             text = session.prompt()
-            launch([text])
-            update_todos()
+            if text != "":
+                launch(text)
+            else:
+                update_todos()
+                print("Todos")
+                for t in todos:
+                    print(t["description"] + " " + t["location"])
+            selected = {"message": "Todos"}
         except KeyboardInterrupt:
             continue  # Control-C pressed. Try again.
         except EOFError:
