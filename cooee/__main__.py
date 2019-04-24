@@ -116,7 +116,8 @@ def complete_cli(arguments: List[str], fish: bool = False):
 
     for s in suggestions:
         if fish:
-            print(f"{s['line']}\t{s['description']}")
+            description: str = s.get('description', "")[:20]
+            print(f"{s['line']}\t{description}")
         else:
             print(f"{s['line']}")
 
