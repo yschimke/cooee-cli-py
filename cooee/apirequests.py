@@ -24,8 +24,8 @@ def launch_request(arguments: Union[str,List[str]]) -> Dict[str, Any]:
     path = api_path(f"/api/v0/goinfo?q={'+'.join(arguments)}")
     r = requests.get(path, headers=headers, auth=get_auth())
 
-    # if r.status_code != 404:
-    #     r.raise_for_status()
+    if r.status_code != 404:
+        r.raise_for_status()
 
     result: Dict[str, Any] = r.json()
     result["status_code"] = r.status_code
