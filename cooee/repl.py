@@ -16,7 +16,7 @@ from .apirequests import complete_request, todo_request
 from .apirequests import launch_request
 
 todos: Optional[List[Dict[str, Any]]] = None
-updated_at: datetime = datetime.now()
+updated_at: Optional[datetime] = None
 selected: Optional[Dict[str, Any]] = {"message": "Todos"}
 
 
@@ -24,9 +24,17 @@ def update_todos():
     global todos
     global updated_at
 
-    since: timedelta = datetime.now() - updated_at
+    needs_update = False
 
-    if since > timedelta(seconds=10):
+    if updated_at is None or todos is None:
+        needs_update = True
+    else:
+        since: timedelta = datetime.now() - updated_at
+
+        if since > timedelta(seconds=10):
+            needs_update = True
+
+    if needs_update:
         todos = todo_request()
         updated_at = datetime.now()
 
@@ -114,7 +122,8 @@ def run_repl():
 
     def bottom_toolbar():
         update_todos()
-        todo_text = f'Todos: ({len(todos)})'
+        num = len(todos) if todos is not None else 0
+        todo_text = f'Todos: ({num})'
         loading_text = f' Loading completions... ' if cooee_completer.loading > 0 else ''
         return todo_text + loading_text
 
@@ -140,7 +149,7 @@ def run_repl():
                 update_todos()
                 print("Todos")
                 for t in todos:
-                    print(t["description"] + " " + t["location"])
+                    print(f"{t.get('description', t['line'])} {t.get('location')}")
             selected = {"message": "Todos"}
         except KeyboardInterrupt:
             continue  # Control-C pressed. Try again.
