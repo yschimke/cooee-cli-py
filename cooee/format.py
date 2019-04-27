@@ -17,10 +17,10 @@ def todo_string(todo: Dict[str, any]):
             result.append(('', ': '))
         result.append(('', todo.get('description')))
 
-    if "location" in todo:
+    if "url" in todo:
         if result:
             result.append(('', '\n'))
-        result.append(('blue', todo.get('location', '')))
+        result.append(('blue', todo.get('url', '')))
 
     if "message" in todo:
         if result:
