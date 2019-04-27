@@ -8,13 +8,8 @@ import click
 
 from .actions import launch_action
 from .apirequests import complete_request, launch_request, todo_request
-from .connection import web_path, write_token
+from .connection import web_path, write_token, set_local
 from .repl import run_repl
-
-
-def set_local(ctx, param, value):
-    global local
-    local = value
 
 
 @click.command()

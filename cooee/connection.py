@@ -9,6 +9,12 @@ headers = {'user-agent': 'cooee/0.0.1'}
 auth: Optional[AuthBase] = None
 local: bool = False
 
+
+def set_local(ctx, param, value):
+    global local
+    local = value
+
+
 token_file = os.path.expanduser("~/.cooee/token")
 if os.path.isfile(token_file):
     with open(token_file, 'r') as f:

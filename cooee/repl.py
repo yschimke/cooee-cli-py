@@ -15,7 +15,7 @@ from .actions import launch_action
 from .apirequests import complete_request, todo_request
 from .apirequests import launch_request
 
-todos: List[Dict[str, Any]] = []
+todos: Optional[List[Dict[str, Any]]] = None
 updated_at: datetime = datetime.now()
 selected: Optional[Dict[str, Any]] = {"message": "Todos"}
 
@@ -91,6 +91,8 @@ def launch(arguments: str):
 def run_repl():
     global todos
     global selected
+
+    update_todos()
 
     cooee_completer = CooeeCompleter()
     cooee_validator = CooeeValidator()
