@@ -42,7 +42,7 @@ def update_todos():
 
 
 class CooeeValidator(Validator):
-    def validate(self, document):
+    def validate(self, document: Document):
         global selected
         line = document.current_line
 
@@ -52,7 +52,7 @@ class CooeeValidator(Validator):
             result = launch_request(line)
             if result["status_code"] == 404:
                 selected = None
-                raise ValidationError(0, f"no match")
+                raise ValidationError(document.cursor_position, f"no match")
             else:
                 selected = result
 
