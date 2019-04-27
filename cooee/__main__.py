@@ -5,7 +5,9 @@ from logging import DEBUG
 from typing import List, Dict, Any
 
 import click
+from prompt_toolkit import print_formatted_text
 
+from .format import todo_string
 from .actions import launch_action
 from .apirequests import complete_request, launch_request, todo_request
 from .connection import web_path, write_token, set_local
@@ -103,7 +105,7 @@ def launch(arguments: List[str]):
 def todo():
     todos: List[Dict[str, Any]] = todo_request()
 
-    print(todos)
+    print_formatted_text(todo_string(todos))
 
 
 def complete_cli(arguments: List[str], fish: bool = False):
