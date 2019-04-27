@@ -4,8 +4,10 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional
 from urllib.parse import ParseResult
 
+from prompt_toolkit import print_formatted_text
 from prompt_toolkit.completion import Completer, Completion, CompleteEvent, ThreadedCompleter
 from prompt_toolkit.document import Document
+from prompt_toolkit.formatted_text import FormattedText
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.shortcuts import CompleteStyle
 from prompt_toolkit.shortcuts import PromptSession
@@ -96,6 +98,13 @@ def launch(arguments: str):
     launch_action(result)
 
 
+def style(todo: Dict[str, any], text: str):
+    if "color" in todo:
+        return FormattedText([(todo["color"], text)])
+    else:
+        return text
+
+
 def run_repl():
     global todos
     global selected
@@ -147,9 +156,11 @@ def run_repl():
                 launch(text)
             else:
                 update_todos()
-                print("Todos")
+                print_formatted_text("Todos")
                 for t in todos:
-                    print(f"{t.get('description', t['line'])} {t.get('location')}")
+                    print_formatted_text(style(t, f"{t['line']}: {t.get('description')}"))
+                    if "location" in t:
+                        print_formatted_text(t["location"])
             selected = {"message": "Todos"}
         except KeyboardInterrupt:
             continue  # Control-C pressed. Try again.
