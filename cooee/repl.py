@@ -139,7 +139,7 @@ def run_repl():
                             refresh_interval=5,
                             rprompt=get_rprompt,
                             validator=ThreadedValidator(cooee_validator),
-                            validate_while_typing=False,
+                            validate_while_typing=True,
                             )
 
     while True:

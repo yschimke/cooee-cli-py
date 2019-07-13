@@ -105,7 +105,8 @@ def launch(arguments: List[str]):
 def todo():
     todos: List[Dict[str, Any]] = todo_request()
 
-    print_formatted_text(todo_string(todos))
+    for t in todos:
+       print_formatted_text(todo_string(t))
 
 
 def complete_cli(arguments: List[str], fish: bool = False):
